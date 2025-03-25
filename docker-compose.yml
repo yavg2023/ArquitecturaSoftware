@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  auth:
+    build: ./auth
+    ports:
+      - "8000:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "8001:8001"
+    depends_on:
+      - auth
+      - video_service
+    command: uvicorn main:app --host 0.0.0.0 --port 8001
+
+  video_service:
+    build: ./video_service
+    ports:
+      - "8002:8002"
+    command: uvicorn main:app --host 0.0.0.0 --port 8002
